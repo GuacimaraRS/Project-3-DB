@@ -18,7 +18,8 @@ Roles: There will be 3 main roles:
 - Client: Clients can see the images, the events, the categories, the packs and the services that the photographer has created. Customers can only create, modify and delete an appointment
   
 ### Tables:
-![Captura de pantalla 2023-11-30 172307](https://github.com/PhotoGua5ive/Project-3-DB/assets/134494931/473fdb07-329c-4475-ac96-9586392110c1)
+![image](https://github.com/PhotoGua5ive/Project-3-DB/assets/134494931/a86aef64-f99a-4fa3-bba5-20abc691a6cf)
+
 
 ### Authentication Endpoints
 ![Captura de pantalla 2023-11-30 173818](https://github.com/PhotoGua5ive/Project-3-DB/assets/134494931/11ce053c-747e-469c-ae0c-0de855cb1ba9)
@@ -33,15 +34,4 @@ POST   | /auth/login      | -     | user | User Login         | `email`, `passwo
 
 ### User Endpoints 
 
-METHOD | ENDPOINT         | TOKEN | ROLE | DESCRIPTION              | POST PARAMS                                     | RETURNS
--------|------------------|-------|------|--------------------------|-------------------------------------------------|--------------------
-GET    | /user            | YES   | admin | Get All Users           |  `query params`                                 | [{user}]
-GET    | /user/:userId    | YES   | admin | Get One User            |                                                 | {user}
-GET    | /user/photogr      | YES   | personnel | Get All Owners      |  `query params`                                 | [{user}]
-GET    | /user/profile    | YES   | user | Get Own Profile          |                                                 |  {user}
-POST   | /user            | YES   | admin |  Create one User     | `first_name`, `last_name`, `email`, `password`, `DNI` ,`role` | {user}
-PUT    | /user/profile   | YES   | user |  Update own user     | `first_name`, `last_name`, `email`, `password`, `DNI`  | {message: 'User updated'}
-PUT    | /user/:ownerId    | YES   | personnel |  Update one Owner     | `first_name`, `last_name`, `email`, `password`, `DNI` | {message: 'User updated'}
-PUT    | /user/password   | YES   | user  | Reset password          | `newPassword` `repeatPassword`                      | { message: 'Password updated }
-DELETE | /user/profile    | YES   | user | Delete own profile       |                                                    | { message: 'Profile deleted' }
-DELETE | /user/:ownerId    | YES   | personnel | Delete one Owner      |                                                   | {message: 'User deleted'}
+
