@@ -18,7 +18,7 @@ Roles: There will be 3 main roles:
 - Client: Clients can see the images, the events, the categories, the packs and the services that the photographer has created. Customers can only create, modify and delete an appointment
   
 ### Tables:
-![image](https://github.com/PhotoGua5ive/Project-3-DB/assets/134494931/a86aef64-f99a-4fa3-bba5-20abc691a6cf)
+![image](https://github.com/PhotoGua5ive/Project-3-DB/assets/134494931/52ec4e0b-433a-43bf-8336-f7ba51b5ccf1)
 
 
 ### Authentication Endpoints
