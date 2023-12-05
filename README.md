@@ -16,7 +16,24 @@ Roles: There will be 3 main roles:
 - Admin: This role has full permissions. It can view, create, update and delete information from all tables.But the admin can't update a comment and Messages
 - Photographer: This role can see all the information. Create, update and delete imagen, event, pack, galery and reservation. You can view client information, but you can not create, update, or delete it. Also the Photographer can create and read the Messages and only read de comment of client.
 - Client: Clients can see the images, galery, pack,event, reservation, messages, comment, photographer and profile it. Customers can only create, modify and delete a reservation. And can only create and read messages. Also, the client can only created, read and delete a comment
+
   
+### Relationships between tables:
+
+#### One to one:
+-Ref: user.idUser - PhotographerProfile.idPhotographer
+
+#### One to many:
+- Ref: user.idUser < comments.idComment
+- Ref: user.idUser < messages.idMessage
+- Ref: user.idPhotographer < galery.idGalery
+- Ref: user.idUser < reservation.idReservation
+- Ref: user.idPhotographer < reservation.idReservation
+- Ref: galery.idGalery  <  imagen.idImagen  
+- Ref: event.idEvent < pack.idPack
+- Ref: pack.idPack < reservation.idReservation
+
+
 ### Tables:
 ![image](https://github.com/PhotoGua5ive/Project-3-DB/assets/134494931/598a0197-3d14-46f9-8b5d-8d623c82ca47)
 
