@@ -18,20 +18,120 @@ Roles: There will be 3 main roles:
 - Client: Clients can see the images, the events, the categories, the packs and the services that the photographer has created. Customers can only create, modify and delete an appointment
   
 ### Tables:
-![image](https://github.com/PhotoGua5ive/Project-3-DB/assets/134494931/e5a57596-f218-4061-925c-8e2e4698d9e6)
+![image](https://github.com/PhotoGua5ive/Project-3-DB/assets/134494931/598a0197-3d14-46f9-8b5d-8d623c82ca47)
 
 
 ### Authentication Endpoints
-![Captura de pantalla 2023-11-30 173818](https://github.com/PhotoGua5ive/Project-3-DB/assets/134494931/11ce053c-747e-469c-ae0c-0de855cb1ba9)
+![image](https://github.com/PhotoGua5ive/Project-3-DB/assets/134494931/70b870ac-8ed7-45f5-947b-d23fe92e73d4)
+
 
 ## Endpoints
 ### User Signup/Login
 
-METHOD | ENDPOINT         | TOKEN | ROLE | DESCRIPTION        | POST PARAMS                                     | RETURNS
--------|------------------|-------|------|--------------------|-------------------------------------------------|--------------------
-POST   | /auth/signup     | -     | user | User Signup        | `name_User`, `phone`, `email`, `password`       | { token: `token` }
-POST   | /auth/login      | -     | user | User Login         | `email`, `password`                             | { token: `token` }
+METHOD | ENDPOINT                  | TOKEN |  ROLE        | DESCRIPTION              | POST PARAMS                                                                           | RETURNS
+-------|---------------------------|-------|--------------|--------------------------|---------------------------------------------------------------------------------------|--------------------
+POST   | /auth/signup              | -     | client       | Client Signup            | `name_User`, `phone`, `email`, `password`                                             | { token: `token` }
+POST   | /auth/signup/professional | -     | photographer | Photographer Signup      | `name_User`, `phone`, `email`, `password`, `address`, `service`, `social_media`       | { token: `token` }
+POST   | /auth/login               | -     | client       | Client Login             | `email`, `password`                                                                   | { token: `token` }
+
 
 ### User Endpoints 
+
+METHOD | ENDPOINT                     | TOKEN | ROLE         | DESCRIPTION              | POST PARAMS                                     | RETURNS
+-------|------------------------------|-------|--------------|--------------------------|-------------------------------------------------|--------------------
+GET    | /user                        | YES   | photographer | Get All user             |  `query params`                                 | [{user}]
+GET    | /user/profile                | YES   | client       | Get own profile          |                                                 | {user}
+POST   | /user                        | YES   | client       | Create own profile       | `name_User`, `phone`, `email`, `password`       | {user}
+PUT    | /user/profile                | YES   | client       | Update own profile       | `name_User`, `phone`, `email`, `password`       | {message: 'Client updated'}
+PUT    | /user/:idUser                | YES   | admin        | Update one client        | `name_User`, `phone`, `email`, `password`       | {message: 'Client updated'}
+PUT    | /user/password               | YES   | client       | Reset password           | `newPassword` `repeatPassword`                  | { message: 'Password updated }
+DELETE | /user/profile                | YES   | client       | Delete own profile       |                                                 | { message: 'Profile deleted' }
+DELETE | /user/:idUser                | YES   | admin        | Delete one client        |                                                 | {message: 'Client deleted'}
+
+### PhotographerProfile Endpoints 
+
+METHOD | ENDPOINT                     | TOKEN | ROLE         | DESCRIPTION              | POST PARAMS                                                                        | RETURNS
+-------|------------------------------|-------|--------------|--------------------------|------------------------------------------------------------------------------------|--------------------
+GET    | /photographer                | YES   | client       | Get All photographer     |  `query params`                                                                    | [{photographerProfile}]
+GET    | /photographer/:idphotographer| YES   | client       | Get One photographer     |                                                                                    | {phographerProfile}
+POST   | /photographer                | YES   | photographer | Create own profile       | `name_User`, `phone`, `email`, `password`, `address`, `service`, `social_media`    | {photographerProfile}
+PUT    | /photographer/profile        | YES   | photographer | Update own profile       |  `name_User`, `phone`, `email`, `password`, `address`, `service`, `social_media`   | {message: 'Photographer updated'}
+DELETE | /photographer/profile        | YES   | photographer | Delete own profile       |                                                                                    | { message: 'Profile deleted' }
+
+### Reservation Endpoints 
+
+METHOD | ENDPOINT                     | TOKEN | ROLE         | DESCRIPTION              | POST PARAMS                                                                        | RETURNS
+-------|------------------------------|-------|--------------|--------------------------|------------------------------------------------------------------------------------|--------------------
+GET    | /reservation                 | YES   | client       | Get All reservation      |  `query params`                                                                    | [{reservation}]
+GET    | /reservation/:idreservation  | YES   | client       | Get One reservation      |  `query params`                                                                    | {reservation}
+POST   | /reservation                 | YES   | client       | Create one reservation   | `day_date`, `hour_date`, `idUser`, `ìdPhotographer`, `idPack`                      | {message: 'Reservation created'}
+PUT    | /reservation/:idreservation  | YES   | client       | Update one reservation   |  `day_date`, `hour_date`                                                           | {message: 'Reservation updated'}
+DELETE | /reservation/:idreservation  | YES   | client       | Delete one reservation   |                                                                                    | { message: 'Reservation deleted' }
+
+### Pack Endpoints 
+
+METHOD | ENDPOINT                     | TOKEN | ROLE         | DESCRIPTION              | POST PARAMS                                                                        | RETURNS
+-------|------------------------------|-------|--------------|--------------------------|------------------------------------------------------------------------------------|--------------------
+GET    | /pack                        | YES   | client       | Get All pack             |  `query params`                                                                    | [{pack}]
+GET    | /pack/:idPack                | YES   | client       | Get One pack             |  `query params`                                                                    | {pack}
+POST   | /pack                        | YES   | photographer | Create one pack          | `name_Pack`, `price`, `price_reservation`, `description`, `idEvent`                | {message: 'Pack created'}
+PUT    | /pack/:idPack                | YES   | photographer | Update one pack          |  `name_Pack`, `price`, `price_reservation`, `description                           | {message: 'Pack updated'}
+DELETE | /pack/:idPack                | YES   | photographer | Delete one pack          |                                                                                    | { message: 'Pack deleted' }
+
+### Event Endpoints 
+
+METHOD | ENDPOINT                     | TOKEN | ROLE         | DESCRIPTION              | POST PARAMS                                                                        | RETURNS
+-------|------------------------------|-------|--------------|--------------------------|------------------------------------------------------------------------------------|--------------------
+GET    | /event                       | YES   | client       | Get All event            |  `query params`                                                                    | [{event}]
+GET    | /event/:idEvent              | YES   | client       | Get One event            |  `query params`                                                                    | {event}
+POST   | /event                       | YES   | photographer | Create one event         | `name_event`, `description`                                                        | {message: 'Event created'}
+PUT    | /event/:idEvent              | YES   | photographer | Update one event         |  `name_event`, `description`                                                       | {message: 'Event updated'}
+DELETE | /event/:idEvent              | YES   | photographer | Delete one event         |                                                                                    | { message: 'Event deleted' }
+
+
+### Galery Endpoints 
+
+METHOD | ENDPOINT                     | TOKEN | ROLE         | DESCRIPTION              | POST PARAMS                                                                        | RETURNS
+-------|------------------------------|-------|--------------|--------------------------|------------------------------------------------------------------------------------|--------------------
+GET    | /galery                      | YES   | client       | Get All galery           |  `query params`                                                                    | [{galery}]
+GET    | /galery/:idGalery            | YES   | client       | Get One galery           |  `query params`                                                                    | {galery}
+POST   | /galery                      | YES   | photographer | Create one galery        | `type_category`, `idImagen`                                                        | {message: 'Galery created'}
+PUT    | /galery/:idGalery            | YES   | photographer | Update one galery        |  `type_category`                                                                   | {message: 'Galery updated'}
+DELETE | /galery/:idGalery            | YES   | photographer | Delete one galery        |                                                                                    | { message: 'Galery deleted' }
+
+### Imagen Endpoints 
+
+METHOD | ENDPOINT                     | TOKEN | ROLE         | DESCRIPTION              | POST PARAMS                                                                        | RETURNS
+-------|------------------------------|-------|--------------|--------------------------|------------------------------------------------------------------------------------|--------------------
+GET    | /imagen                      | YES   | client       | Get All imagen           |  `query params`                                                                    | [{imagen}]
+GET    | /imagen/:idImagen            | YES   | client       | Get One imagen           |  `query params`                                                                    | {imagen}
+POST   | /imagen                      | YES   | photographer | Create one imagen        | `title_imagen`, `description`, `url`                                               | {message: 'Imagen created'}
+PUT    | /imagen/:idImagen            | YES   | photographer | Update one imagen        |  `title_imagen`, `description`, `url`                                              | {message: 'Imagen updated'}
+DELETE | /imagen/:idImagen            | YES   | photographer | Delete one imagen        |                                                                                    | { message: 'Imagen deleted' }
+
+### Comments Endpoints 
+
+METHOD | ENDPOINT                     | TOKEN | ROLE           | DESCRIPTION              | POST PARAMS                                                                        | RETURNS
+-------|------------------------------|-------|----------------|--------------------------|------------------------------------------------------------------------------------|--------------------
+GET    | /comment                     | YES   | client         | Get All comment          |  `query params`                                                                    | [{comment}]
+GET    | /comment/:idComment          | YES   | client         | Get One comment          |  `query params`                                                                    | {comment}
+POST   | /comment                     | YES   | only client    | Create one comment       | `description`, `score`                                                             | {message: 'Comment created'}
+POST   | /comment/:idCommentAnswer    | YES   | client         | Answer one comment       | `description`                                                                      | {message: 'Comment answered'}
+DELETE | /comment/:idComment          | YES   | [admin,client] | Delete one comment       |                                                                                    | { message: 'Imagen deleted' }
+
+### Messages Endpoints 
+
+METHOD | ENDPOINT                     | TOKEN | ROLE           | DESCRIPTION              | POST PARAMS                                                                        | RETURNS
+-------|------------------------------|-------|----------------|--------------------------|------------------------------------------------------------------------------------|--------------------
+GET    | /message                     | YES   | client         | Get All message          |  `query params`                                                                    | [{messages}]
+GET    | /message/:idMessage          | YES   | client         | Get One message          |  `query params`                                                                    | {messages}
+POST   | /message                     | YES   | only client    | Create one message       | `description`                                                                      | {message: 'Message sent'}
+POST   | /message/:idAnswer           | YES   | client         | Answer one message       | `description`                                                                      | {message: 'Message answered'}
+DELETE | /message/:idMessage          | YES   | admin          | Delete one message       |                                                                                    | { message: 'Message deleted' }
+
+
+
+
+
 
 
