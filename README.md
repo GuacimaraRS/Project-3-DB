@@ -26,16 +26,16 @@ Roles: There will be 3 main roles:
 #### One to many:
 - Ref: user.idUser < comments.idComment
 - Ref: user.idUser < messages.idMessage
-- Ref: user.idPhotographer < galery.idGalery
+- Ref: user.idUser < galery.idGalery
 - Ref: user.idUser < reservation.idReservation
-- Ref: user.idPhotographer < reservation.idReservation
-- Ref: galery.idGalery  <  imagen.idImagen  
+- Ref: galery.idGalery  < imagen.idImagen  
 - Ref: event.idEvent < pack.idPack
 - Ref: pack.idPack < reservation.idReservation
 
 
 ### Tables:
-![image](https://github.com/PhotoGua5ive/Project-3-DB/assets/134494931/598a0197-3d14-46f9-8b5d-8d623c82ca47)
+![image](https://github.com/PhotoGua5ive/Project-3-DB/assets/134494931/9b4cca38-0051-4afb-91bb-bafe1c1a2686)
+
 
 
 ### Authentication Endpoints
@@ -58,8 +58,8 @@ METHOD | ENDPOINT                     | TOKEN | ROLE         | DESCRIPTION      
 -------|------------------------------|-------|--------------|--------------------------|-------------------------------------------------|--------------------
 GET    | /user                        | YES   | admin        | Get All user             |  `query params`                                 | [{user}]
 GET    | /user/profile                | YES   | client       | Get own profile          |                                                 | {user}
-GET    | /user/ContactInfo            | YES   | client       | Get All photographer     |  `query params`                                 | [{ContactInfo_Photographer }]
-GET    | /user/:idContactInfo         | YES   | client       | Get One photographer     |                                                 | {ContactInfo_Photographer }
+GET    | /user/ContactInfo            | YES   | client       | Get All photographer     |  `query params`                                 | [{ContactInfo_Photographer}]
+GET    | /user/:idContactInfo         | YES   | client       | Get One photographer     |                                                 | {ContactInfo_Photographer}
 POST   | /user                        | YES   | admin        | Create own profile       | `name_User`,`phone`,`email`,`password`,`role`   | {user}
 PUT    | /user/profile                | YES   | client       | Update own profile       | `name_User`, `phone`, `email`, `password`       | {message: 'Client updated'}
 PUT    | /user/:idUser                | YES   | admin        | Update one client        | `name_User`, `phone`, `email`, `password`       | {message: 'Client updated'}
