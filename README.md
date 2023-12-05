@@ -21,7 +21,7 @@ Roles: There will be 3 main roles:
 ### Relationships between tables:
 
 #### One to one:
--Ref: user.idUser - PhotographerProfile.idPhotographer
+-Ref: user.idUser - contactInfoPhotographer.idContactInfo
 
 #### One to many:
 - Ref: user.idUser < comments.idComment
@@ -56,24 +56,25 @@ POST   | /auth/login               | -     | client       | Client Login        
 
 METHOD | ENDPOINT                     | TOKEN | ROLE         | DESCRIPTION              | POST PARAMS                                     | RETURNS
 -------|------------------------------|-------|--------------|--------------------------|-------------------------------------------------|--------------------
-GET    | /user                        | YES   | photographer | Get All user             |  `query params`                                 | [{user}]
+GET    | /user                        | YES   | admin        | Get All user             |  `query params`                                 | [{user}]
 GET    | /user/profile                | YES   | client       | Get own profile          |                                                 | {user}
-POST   | /user                        | YES   | client       | Create own profile       | `name_User`, `phone`, `email`, `password`       | {user}
+GET    | /user/ContactInfo            | YES   | client       | Get All photographer     |  `query params`                                 | [{ContactInfo_Photographer }]
+GET    | /user/:idContactInfo         | YES   | client       | Get One photographer     |                                                 | {ContactInfo_Photographer }
+POST   | /user                        | YES   | admin        | Create own profile       | `name_User`,`phone`,`email`,`password`,`role`   | {user}
 PUT    | /user/profile                | YES   | client       | Update own profile       | `name_User`, `phone`, `email`, `password`       | {message: 'Client updated'}
 PUT    | /user/:idUser                | YES   | admin        | Update one client        | `name_User`, `phone`, `email`, `password`       | {message: 'Client updated'}
 PUT    | /user/password               | YES   | client       | Reset password           | `newPassword` `repeatPassword`                  | { message: 'Password updated }
 DELETE | /user/profile                | YES   | client       | Delete own profile       |                                                 | { message: 'Profile deleted' }
 DELETE | /user/:idUser                | YES   | admin        | Delete one client        |                                                 | {message: 'Client deleted'}
 
-### PhotographerProfile Endpoints 
+### ContactInfo_Photographer Endpoints 
 
 METHOD | ENDPOINT                     | TOKEN | ROLE         | DESCRIPTION              | POST PARAMS                                                                        | RETURNS
 -------|------------------------------|-------|--------------|--------------------------|------------------------------------------------------------------------------------|--------------------
-GET    | /photographer                | YES   | client       | Get All photographer     |  `query params`                                                                    | [{photographerProfile}]
-GET    | /photographer/:idphotographer| YES   | client       | Get One photographer     |                                                                                    | {phographerProfile}
-POST   | /photographer                | YES   | photographer | Create own profile       | `name_User`, `phone`, `email`, `password`, `address`, `service`, `social_media`    | {photographerProfile}
-PUT    | /photographer/profile        | YES   | photographer | Update own profile       |  `name_User`, `phone`, `email`, `password`, `address`, `service`, `social_media`   | {message: 'Photographer updated'}
-DELETE | /photographer/profile        | YES   | photographer | Delete own profile       |                                                                                    | { message: 'Profile deleted' }
+GET    | /ContactInfo/profile         | YES   | photographer | Get photographer profile |                                                                                    | {ContactInfo_Photographer}
+POST   | /ContactInfo                 | YES   | admin        | Create Contact info      | `name_User`, `phone`, `email`, `password`, `address`, `service`, `social_media`    | {photographerProfile}
+PUT    | /ContactInfo/profile         | YES   | photographer | Update Contact info      |  `name_User`, `phone`, `email`, `password`, `address`, `service`, `social_media`   | {message: 'Photographer updated'}
+DELETE | /ContactInfo/profile         | YES   | photographer | Delete Contact info      |                                                                                    | { message: 'Photographer Profile deleted' }
 
 ### Reservation Endpoints 
 
