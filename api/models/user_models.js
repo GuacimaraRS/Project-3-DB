@@ -4,10 +4,6 @@ const { sequelize } = require('../../database')
 const User = sequelize.define(
     'user',
     {
-        idPhotographer: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-        },
         name_user: {
             type: DataTypes.STRING,
             allowNull: false,

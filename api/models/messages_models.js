@@ -1,18 +1,18 @@
 const { DataTypes } = require('sequelize')
 const { sequelize } = require('../../database')
 
-const Event = sequelize.define(
-    'event',
+const Message = sequelize.define(
+    'message',
     {
-        name_event: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
         description: {
             type: DataTypes.STRING,
-        }
+            allowNull: false,
+            validate: {
+                len: [1, 300],
+            },
+        },
     },
     { timestamps: false }
 )
 
-module.exports = Event
+module.exports = Message
