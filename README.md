@@ -13,9 +13,9 @@ When booking an appointment to take photos, the client will have to leave a depo
 Below we are going to show and explain the tables of our DB
 
 Roles: There will be 3 main roles:
-- Admin: This role has full permissions. It can view, create, update and delete information from all tables.
-- Photographer: This role can see all the information. Create, update and delete images, event, category, pack and services. You can view client information, but you can not create, update, or delete it.
-- Client: Clients can see the images, the events, the categories, the packs and the services that the photographer has created. Customers can only create, modify and delete an appointment
+- Admin: This role has full permissions. It can view, create, update and delete information from all tables.But the admin can't update a comment and Messages
+- Photographer: This role can see all the information. Create, update and delete imagen, event, pack, galery and reservation. You can view client information, but you can not create, update, or delete it. Also the Photographer can create and read the Messages and only read de comment of client.
+- Client: Clients can see the images, galery, pack,event, reservation, messages, comment, photographer and profile it. Customers can only create, modify and delete a reservation. And can only create and read messages. Also, the client can only created, read and delete a comment
   
 ### Tables:
 ![image](https://github.com/PhotoGua5ive/Project-3-DB/assets/134494931/598a0197-3d14-46f9-8b5d-8d623c82ca47)
