@@ -18,7 +18,7 @@ function initializeAndListenWithExpress() {
 		.use(cors())
 		.use(morgan('dev'))
 		.use(express.json())
-		//.use('/api', require('./api/routes/index'))
+		.use('/api', require('./api/routes/index'))
 
 		.listen(process.env.PORT, () => {
 			console.log(`> Listening on port: 3000`)
