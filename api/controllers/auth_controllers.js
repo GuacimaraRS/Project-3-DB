@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+
 const User = require('../models/user_models')
 const ContactInfo = require("../models/contactInfoPhotographer_models.js");
 
@@ -19,31 +20,33 @@ const signUp = async (req, res) => {
 
         const user = await User.create(req.body)
 
-        const token = jwt.sign(payload, process.env.SECRET, { expiresIn: '1h' })
+        const token = jwt.sign(payload, 'secrect', { expiresIn: '1h' })
 
-        if (user.role === "client") {
-            const users = await User.create(req.body)
-            await users.setUser(user)
-
-            return res.status(200).json({
-                message: 'User created',
-                name: user.name_user,
-                email: user.email,
-                role: user.role,
-                token: token
-            })
-
-        } else if (user.role === "photographer") {
+        if (user.role === "photographer") {
             const contactInfoPhoto = await ContactInfo.create(req.body)
             await contactInfoPhoto.setUser(user)
+           
 
             return res.status(200).json({
                 message: 'Photographer created',
                 name: user.name_user,
                 email: user.email,
                 role: user.role,
-                phone: ContactInfo.phone,
+                phone: user.phone,
                 address: ContactInfo.address,
+                token: token
+               
+            })
+
+        } else if (user.role === "client") {
+            const users = await User.create(req.body)
+            await users.setUser(user)
+
+            return res.status(200).json({
+                message: 'Client created',
+                name: user.name_user,
+                email: user.email,
+                role: user.role,
                 token: token
             })
         } else

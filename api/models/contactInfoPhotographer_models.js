@@ -5,16 +5,13 @@ const PhotographerProfile = sequelize.define(
     'photographer',
     {
         address: {
-            type: DataTypes.STRING,
-            allowNull: false,
+            type: DataTypes.STRING
         },
         service: {
-            type: DataTypes.STRING,
-            allowNull: false,
+            type: DataTypes.STRING
         },
         social_Media: {
-            type: DataTypes.STRING,
-            allowNull: false,
+            type: DataTypes.STRING
         },
         bizum_NCuenta: {
             type: DataTypes.STRING,

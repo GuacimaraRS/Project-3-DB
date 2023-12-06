@@ -67,14 +67,10 @@ async function getOwnProfile(req, res) {
 async function getOnePhotographer(req, res) {
 	try {
 		const user = await User.findByPk(req.params.userId, {
-			where: {
-				id: res.locals.user.id, 
-				role: 'photographer'
-			},
-			attributes: ['id','name_user','phone','email'],
+			attributes: ['id','name_user','phone','email','role'],
 			include: { model: ContactInfoPhotographer }
 		})
-		if (user) {
+		if (user.role === "photographer") {
 			return res.status(200).json(user)
 		} else {
 			return res.status(404).send('User not found')
@@ -170,7 +166,6 @@ async function deleteUser(req, res) {
 		const user = await User.destroy({
 			where: {
 				id: req.params.userId,
-				role: 'admin'
 			},
 		})
 		if (user) {
@@ -187,8 +182,8 @@ async function deleteOwner(req, res) {
 	try {
 		const user = await User.destroy({
 			where: {
-				id: req.params.userId,
-				role: 'client'
+				id: res.locals.user.id
+
 			},
 		})
 
