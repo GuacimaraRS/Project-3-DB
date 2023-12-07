@@ -108,6 +108,7 @@ async function createUser(req, res) {
 		} else if (user.role === "photographer") {
 			const contactInfoPhoto = await ContactInfoPhotographer.create(req.body)
 			await contactInfoPhoto.setUser(user)
+			//await contactInfoPhoto.addUser(user)
 
 			return res.status(200).json({
 				message: 'PhotoGrapher created',

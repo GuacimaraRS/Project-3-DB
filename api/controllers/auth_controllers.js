@@ -23,9 +23,9 @@ const signUp = async (req, res) => {
         const token = jwt.sign(payload, 'secrect', { expiresIn: '1h' })
 
         if (user.role === "photographer") {
+           
             const contactInfoPhoto = await ContactInfo.create(req.body)
             await contactInfoPhoto.setUser(user)
-           
 
             return res.status(200).json({
                 message: 'Photographer created',
@@ -39,8 +39,6 @@ const signUp = async (req, res) => {
             })
 
         } else if (user.role === "client") {
-            const users = await User.create(req.body)
-            await users.setUser(user)
 
             return res.status(200).json({
                 message: 'Client created',

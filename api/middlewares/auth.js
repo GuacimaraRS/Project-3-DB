@@ -37,13 +37,14 @@ const checkAdmin = (req, res, next) => {
 }
 
 const checkPhotoGrapher = (req, res, next) => {
-    if (res.locals.user.role === 'photographer') {
+    if (res.locals.user.role !== 'photographer' ) {
         return res.status(401).send('User not authorized' )
     }
     next()
 }
+
 const checkUser = (req, res, next) => {
-    if (res.locals.user.role === 'client') {
+    if (res.locals.user.role !== 'client') {
         return res.status(401).send('User not authorized' )
     }
     next()

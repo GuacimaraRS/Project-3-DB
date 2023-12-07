@@ -17,6 +17,9 @@ function addRelationsToModels() {
 		User.hasOne(PhotographerProfile)
 		PhotographerProfile.belongsTo(User)
 
+		PhotographerProfile.hasOne(User)
+		User.belongsTo(PhotographerProfile)
+
 		//One to Many
 		User.hasMany(Comment)
 		Comment.belongsTo(User)
