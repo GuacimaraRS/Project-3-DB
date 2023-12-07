@@ -17,8 +17,6 @@ function addRelationsToModels() {
 		User.hasOne(PhotographerProfile)
 		PhotographerProfile.belongsTo(User)
 
-		PhotographerProfile.hasOne(User)
-		User.belongsTo(PhotographerProfile)
 
 		//One to Many
 		User.hasMany(Comment)
@@ -30,8 +28,11 @@ function addRelationsToModels() {
 		User.hasMany(Galery)
 		Galery.belongsTo(User)
 
-		User.hasMany(Reservation)
-		Reservation.belongsTo(User)
+		User.hasMany(Reservation, {foreignKey: 'clientId'})
+		Reservation.belongsTo(User, {foreignKey: 'clientId'})
+		
+		User.hasMany(Reservation, {foreignKey: 'photographerId'})
+		Reservation.belongsTo(User, {foreignKey: 'photographerId'})
 
 		Galery.hasMany(Images)
 		Images.belongsTo(Galery)

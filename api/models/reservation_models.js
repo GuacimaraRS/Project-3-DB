@@ -1,5 +1,6 @@
-const { DataTypes } = require('sequelize')
-const { sequelize } = require('../../database')
+const { DataTypes, ForeignKeyConstraintError } = require('sequelize')
+const { sequelize } = require('../../database');
+
 
 const Reservation = sequelize.define(
   'reservation',
@@ -29,7 +30,7 @@ const Reservation = sequelize.define(
         },
     }
 },
-{ timestamps: false }
+    { timestamps: false }
 )
 
 module.exports = Reservation

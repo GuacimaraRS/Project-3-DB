@@ -43,7 +43,7 @@ async function getAllPhotographer(req, res) {
 	}
 }
 
-async function getOwnProfile(req, res) {
+async function getProfile(req, res) {
 	try {
 		const user = await User.findOne({
 			where: {
@@ -64,6 +64,7 @@ async function getOwnProfile(req, res) {
 	}
 }
 
+
 async function getOnePhotographer(req, res) {
 	try {
 		const user = await User.findByPk(req.params.userId, {
@@ -81,44 +82,54 @@ async function getOnePhotographer(req, res) {
 }
 
 async function createUser(req, res) {
-	try {
-		const payload = { email: req.body.email }
-		const salt = bcrypt.genSaltSync(parseInt(10))
-		const encrypted = bcrypt.hashSync(req.body.password, salt)
-		req.body.password = encrypted
+	try 
+	{
+		if (req.body.password.length < 8) {
+		return res.status(400).json({ message: 'Password too short' })
+	}
+	const payload = { email: req.body.email }
+	const salt = bcrypt.genSaltSync(parseInt(10))
+	const encrypted = bcrypt.hashSync(req.body.password, salt)
+	req.body.password = encrypted
 
-		const user = await User.create(req.body, {
-			attributes: { exclude: ['password'] }
+	const user = await User.create(req.body)
+
+	const token = jwt.sign(payload, 'secrect', { expiresIn: '1h' })
+
+	if (user.role === "photographer") {
+	   
+		const contactInfoPhoto = await ContactInfoPhotographer.create(req.body)
+		await contactInfoPhoto.setUser(user)
+
+		return res.status(200).json({
+			message: 'Photographer created',
+			name: user.name_user,
+			email: user.email,
+			role: user.role,
+			phone: user.phone,
+			address: ContactInfoPhotographer.address,
+			token: token
+		   
 		})
 
+	} else if (user.role === "client") {
 
-		const token = jwt.sign(payload, process.env.SECRET, { expiresIn: '24h' })
-
-		if (user.role === "client") {
-			const users = await User.create(req.body)
-			await users.setUser(user)
-
-			return res.status(200).json({
-				message: 'Client created',
-				user: user,
-				user: users,
-				token: token
-			})
-
-		} else if (user.role === "photographer") {
-			const contactInfoPhoto = await ContactInfoPhotographer.create(req.body)
-			await contactInfoPhoto.setUser(user)
-			//await contactInfoPhoto.addUser(user)
-
-			return res.status(200).json({
-				message: 'PhotoGrapher created',
-				user: user,
-				PhotoGrapherContact: contactInfoPhoto,
-				token: token
-			})
-		}
-	} catch (error) {
-		res.status(500).send(error.message)
+		return res.status(200).json({
+			message: 'Client created',
+			name: user.name_user,
+			email: user.email,
+			role: user.role,
+			token: token
+		})
+	} else
+		return res.status(200).json({
+			message: 'Admin created',
+			name: user.name_user,
+			email: user.email,
+			token: token
+		})
+} catch (error) {
+	return res.status(500).json({ message: error.message })
 	}
 }
 
@@ -201,7 +212,7 @@ async function deleteOwner(req, res) {
 
 module.exports = {
 	getAllUsers,
-	getOwnProfile,
+	getProfile,
 	getAllPhotographer,
 	getOnePhotographer,
 	createUser,
