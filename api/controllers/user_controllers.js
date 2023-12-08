@@ -135,21 +135,29 @@ async function createUser(req, res) {
 
 async function updateOneUser(req, res) {
 	try {
-
-		const [userExist, user] = await User.update(req.body, {
-			returning: true,
+		const user = await User.findOne({
 			where: {
-				id: req.params.userId,
-				role: 'admin'
+				id: req.params.userId
+			},
+			include: [{ model: ContactInfoPhotographer }]
+		});
+		await ContactInfoPhotographer.update(req.body,{
+			where: {
+				userId: user.id
 			}
-		})
-		if (userExist !== 0 && user.role === "admin") {
-			return res.status(200).json({ message: 'User updated', user: user })
-		} else if (user.role !== 'admin') {
-			return res.status(401).send('User not authorized to update this user')
+		});
+		await User.update(req.body,{
+			where: {
+				id: req.params.userId
+			}
+		});
+
+		if (user ) {
+			return res.status(200).json({ message: 'User updated', user: user  })
 		} else {
 			return res.status(404).send('User not found')
 		}
+
 	} catch (error) {
 		return res.status(500).send(error.message)
 	}
@@ -192,6 +200,7 @@ async function deleteUser(req, res) {
 
 async function deleteOwner(req, res) {
 	try {
+		
 		const user = await User.destroy({
 			where: {
 				id: res.locals.user.id

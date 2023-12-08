@@ -73,17 +73,23 @@ async function getProfile(req, res) {
 
 async function updateProfile(req, res) {
 	try {
-		const user = await User.update(req.body, {
+		const user = await User.findOne({
 			where: {
-				id: res.locals.user.id,
+				id: res.locals.user.id
+			},
+			include: [{ model: InfoPhotographer }]
+		});
+		await InfoPhotographer.update(req.body,{
+			where: {
+				userId: user.id
 			}
-		})
-		const infoPhotographer = await InfoPhotographer.update(req.body,{
+		});
+		await User.update(req.body,{
 			where: {
-				id: res.locals.user.id,
-			}	
-	})
-		
+				id: res.locals.user.id
+			}
+		});
+
 		if (user ) {
 			return res.status(200).json({ message: 'Photographer updated', user: user  })
 		} else {
@@ -98,19 +104,20 @@ async function updateProfile(req, res) {
 
 async function deleteProfile(req, res) {
 	try {
-		const user = await User.destroy({
-			where: {
-				id: res.locals.user.id
+		const user = await User.findOne({
+            where: {
+                id: res.locals.user.id
+            },
+            include: [{ model: InfoPhotographer }]
+        });
+			await InfoPhotographer.destroy({
+						where: {
+							userId: user.id
+						}
+					});
+        await user.destroy(); 
 
-			},
-			include: {model: InfoPhotographer}
-		})
-		
-		if (user) {
-			return res.status(200).send('User deleted')
-		} else {
-			return res.status(404).send('User not found or not authorized to delete this user')
-		}
+        return res.status(200).send('User and associated info deleted')
 	} catch (error) {
 		return res.status(500).send(error.message)
 	}

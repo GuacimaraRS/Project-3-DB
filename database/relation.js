@@ -37,6 +37,9 @@ function addRelationsToModels() {
 		Galery.hasMany(Images)
 		Images.belongsTo(Galery)
 
+		User.hasMany(Event)
+		Event.belongsTo(User)
+
 		Event.hasMany(Pack)
 		Pack.belongsTo(Event)
 

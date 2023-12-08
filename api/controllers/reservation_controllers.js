@@ -7,14 +7,14 @@ async function getAllReservation(req, res) {
 	try {
 		if (res.locals.user.role === 'client') {
 			const reserclient = await Reservation.findAll({
-				where: { id: res.locals.user.id },
+				where: { clientId: res.locals.user.id },
 				include: { model: Event, model: Pack }
 			})
 			return res.status(200).json(reserclient)
 		}
 		else if (res.locals.user.role ==='photographer') {
 			const reserphotogra = await Reservation.findAll({
-				where: { id: res.locals.user.id },
+				where: { photographerId: res.locals.user.id },
 				include: { model: Event, model: Pack }
 			})
 			return res.status(200).json(reserphotogra)
@@ -61,54 +61,94 @@ async function getOneReservation(req, res) {
 	}
 }
 
-async function bookReservation(req, res) {
+async function createReservation(req, res) {
 	try {
-		const { packId, eventId } = req.body
-		const reservation = await Reservation.findByPk(req.params.packId)
-
-		if (reservation) {
-			if (appointment.status === 'available') {
-
-				await reservation.addSchedule(treatmentIds)
-
-				const treatments = await Treatment.findAll({
-					 where: { id: treatmentIds } })
-				const description = treatments.map(treatment => treatment.description).join(', ')
-
-				await appointment.update({
-					description,
-					petId,
-					status: 'not_available'
+		
+		if(res.locals.user.role === "photographer"){
+			const user = await User.findByPk(res.locals.user.id)
+			const reservation = await Reservation.create({
+				day_event: req.body.day_event,
+				hour_event: req.body.hour_event,
+				packId: req.params.packId,
+				photographerId: user.id
+			})
+			return res.status(200).json({
+				message: 'Reservation created',
+				reservation: reservation
 				})
+		}else if (res.locals.user.role === "client"){
+			const user = await User.findByPk(res.locals.user.id)
+			const reservation = await Reservation.create({
+				day_event: req.body.day_event,
+				hour_event: req.body.hour_event,
+				packId: req.params.packId,
+				clientId: user.id,
+			})
+			return res.status(200).json({
+				message: 'Reservation created',
+				reservation: reservation
+				})
+			
+		
+		}else{//seria el admin
+			
+			const clientId = await User.findByPk(req.body,{
+				where:{
+					clientId: req.body.userId,
+				}
+			})
+			const photographerId = await User.findByPk(req.body,{
+				where:{
+					photographerId: req.body.userId,
+				}
+			})
 
-				return res.status(200).json({ message: 'Appointment booked successfully' })
-			} else {
-				return res.status(409).send('Appointment is not available for booking')
+			if(clientId){
+				const reservation = await Reservation.create({
+				day_event: req.body.day_event,
+				hour_event: req.body.hour_event,
+				packId: req.params.packId,
+				clientId: clientId,
+			})
+			return res.status(200).json({
+				message: 'Reservation created',
+				reservation: reservation
+				})
+			}else if(photographerId){
+				const reservation = await Reservation.create({
+					day_event: req.body.day_event,
+					hour_event: req.body.hour_event,
+					packId: req.params.packId,
+					photographerId: photographerId
+				})
+				return res.status(200).json({
+					message: 'Reservation created',
+					reservation: reservation
+					})
 			}
-		} else {
-			return res.status(404).send('Appointment not found')
+			
 		}
-	} catch (error) {
-		return res.status(500).send(error.message)
+		} catch (error) {
+			res.status(500).send(error.message)
 	}
 }
 
-async function createAppointment(req, res) {
+async function createReservationByAdmin(req, res) {
 	try {
-		const appointment = await Appointment.create({
-
-			appointment_date: req.body.appointment_date,
-			appointment_time: req.body.appointment_time,
-			duration: req.body.duration
-		})
-		const user = await User.findByPk(req.params.vetId)
-		await appointment.setUser(user)
-
-
-
-		return res.status(200).json({ message: 'Appointment created', appointment: appointment })
-	} catch (error) {
-		res.status(500).send(error.message)
+			const user = await User.findByPk(res.locals.user.id)
+			const reservation = await Reservation.create({
+				day_event: req.body.day_event,
+				hour_event: req.body.hour_event,
+				packId: req.params.packId,
+				photographerId: user.id
+			})
+			return res.status(200).json({
+				message: 'Reservation created',
+				reservation: reservation
+				})
+		
+		} catch (error) {
+			res.status(500).send(error.message)
 	}
 }
 
@@ -130,17 +170,47 @@ async function updateAppointment(req, res) {
 	}
 }
 
-async function deleteAppointment(req, res) {
+async function deleteReservation(req, res) {
 	try {
-		const appointment = await Appointment.destroy({
+		if (res.locals.user.role === 'client') {
+			const reserclient = await Reservation.findOne(
+				{
+					where: {
+						clientId: res.locals.user.id,
+						id: req.params.reservationId,
+					},
+				})
+			await reserclient.destroy()
+			return res.status(200).json(` Reservation deleted`)
+		} else if (res.locals.user.role === 'photographer') {
+			const reserphotographer = await Reservation.findOne(
+				{
+					where: {
+						photographerId: res.locals.user.id,
+						id: req.params.reservationId,
+					},
+				})
+			await reserphotographer.destroy()
+			return res.status(200).json(` Reservation deleted`)
+
+		} else {
+			return res.status(404).send('Reservation not found')
+		}
+	} catch (error) {
+		return res.status(500).send(error.message)
+	}
+}
+async function deleteReservationByAdmin(req, res) {
+	try {
+		const reservation = await Reservation.destroy({
 			where: {
-				id: req.params.appointmentId,
+				id: req.params.reservationId,
 			},
 		})
-		if (appointment) {
-			return res.status(200).json('Appointment deleted')
+		if (reservation) {
+			return res.status(200).json('Reservation deleted')
 		} else {
-			return res.status(404).send('Appointment not found')
+			return res.status(404).send('Reservation not found')
 		}
 	} catch (error) {
 		return res.status(500).send(error.message)
@@ -149,5 +219,8 @@ async function deleteAppointment(req, res) {
 
 module.exports = {
 	getAllReservation,
-    getOneReservation
+    getOneReservation,
+	createReservation,
+	deleteReservation,
+	deleteReservationByAdmin
 }
