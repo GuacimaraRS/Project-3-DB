@@ -152,18 +152,22 @@ async function createReservationByAdmin(req, res) {
 	}
 }
 
-async function updateAppointment(req, res) {
+async function updateReservation(req, res) {
 	try {
-		const [appointmentExist, appointment] = await Appointment.update(req.body, {
+		const [reservationExist, reservation] = await Reservation.update(
+			{
+				day_event: req.body.day_event,
+				hour_event: req.body.hour_event,
+			}, {
 			returning: true,
 			where: {
-				id: req.params.appointmentId,
+				id: req.params.reservationId,
 			},
 		})
-		if (appointmentExist !== 0) {
-			return res.status(200).json({ message: 'Appointment updated', appointment: appointment })
+		if (reservationExist !== 0) {
+			return res.status(200).json({ message: 'Reservation updated', reservation: reservation })
 		} else {
-			return res.status(404).send('Appointment not found')
+			return res.status(404).send('Reservation not found')
 		}
 	} catch (error) {
 		return res.status(500).send(error.message)
@@ -221,6 +225,7 @@ module.exports = {
 	getAllReservation,
     getOneReservation,
 	createReservation,
+	updateReservation,
 	deleteReservation,
 	deleteReservationByAdmin
 }

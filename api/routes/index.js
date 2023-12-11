@@ -8,7 +8,7 @@ router.use('/photographer',checkAuth, require('./contactInfoPhotographer_routes'
 router.use('/reservation', checkAuth, require('./reservation_routes'))
 router.use('/event',checkAuth, require('./event_router'))
 router.use('/pack',checkAuth, require('./pack_router'))
-// router.use('/appointment', checkAuth,require('./appointment.route'))
+router.use('/comment', checkAuth,require('./comment_router'))
 
 
 module.exports = router
