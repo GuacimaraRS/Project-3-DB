@@ -88,46 +88,7 @@ async function createReservation(req, res) {
 				message: 'Reservation created',
 				reservation: reservation
 				})
-			
-		
-		}else{//seria el admin
-			
-			const clientId = await User.findByPk(req.body,{
-				where:{
-					clientId: req.body.userId,
-				}
-			})
-			const photographerId = await User.findByPk(req.body,{
-				where:{
-					photographerId: req.body.userId,
-				}
-			})
-
-			if(clientId){
-				const reservation = await Reservation.create({
-				day_event: req.body.day_event,
-				hour_event: req.body.hour_event,
-				packId: req.params.packId,
-				clientId: clientId,
-			})
-			return res.status(200).json({
-				message: 'Reservation created',
-				reservation: reservation
-				})
-			}else if(photographerId){
-				const reservation = await Reservation.create({
-					day_event: req.body.day_event,
-					hour_event: req.body.hour_event,
-					packId: req.params.packId,
-					photographerId: photographerId
-				})
-				return res.status(200).json({
-					message: 'Reservation created',
-					reservation: reservation
-					})
-			}
-			
-		}
+						}
 		} catch (error) {
 			res.status(500).send(error.message)
 	}
@@ -135,17 +96,20 @@ async function createReservation(req, res) {
 
 async function createReservationByAdmin(req, res) {
 	try {
-			const user = await User.findByPk(res.locals.user.id)
+		const user = await User.findByPk(req.params.userId)
+
+		if(user.role === "client"){
 			const reservation = await Reservation.create({
-				day_event: req.body.day_event,
-				hour_event: req.body.hour_event,
-				packId: req.params.packId,
-				photographerId: user.id
+			day_event: req.body.day_event,
+			hour_event: req.body.hour_event,
+			packId: req.body.packId,
+			clientId: user.id
+		})
+		return res.status(200).json({
+			message: 'Reservation created',
+			reservation: reservation
 			})
-			return res.status(200).json({
-				message: 'Reservation created',
-				reservation: reservation
-				})
+		}
 		
 		} catch (error) {
 			res.status(500).send(error.message)
@@ -225,6 +189,7 @@ module.exports = {
 	getAllReservation,
     getOneReservation,
 	createReservation,
+	createReservationByAdmin,
 	updateReservation,
 	deleteReservation,
 	deleteReservationByAdmin

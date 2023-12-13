@@ -23,7 +23,6 @@ async function getEventPack(req, res) {
 	}
 }
 
-
 async function createEvent(req, res) {
     try {
         if (res.locals.user.role !== "client") {
@@ -45,7 +44,60 @@ async function createEvent(req, res) {
     }
 }
 
+async function updateEvent(req, res) {
+    try {
+        if(res.locals.user.role !== "client"){ 
+            const [eventExist] = await Event.update(req.body,
+                {
+                    where: { id: req.params.eventId }
+                })
+
+            if (eventExist !== 0) {
+                return res.status(200).json({ message: 'Event updated' })
+            } else {
+                return res.status(404).send('Event not found')
+            }}else
+            return res.status(404).send('User not authorization')
+        
+    } catch (error) {
+        return res.status(500).send(error.message)
+    }
+}
+
+async function deleteEvent(req, res) {
+	try {
+
+		if(res.locals.user.role !== "client"){ 
+            const deleteEvent = await Event.findOne(
+                {
+                    where: {
+                        id: req.params.eventId
+                    }
+                })
+            const deletePack = await Pack.findOne({
+                where:{
+                    eventId: req.params.eventId
+                }
+            })
+            await deleteEvent.destroy()
+            await deletePack.destroy()
+                return res.status(200).json({
+                    message: 'Event deleted',
+                    event: deleteEvent, deletePack
+                })
+           
+        }else
+            return res.status(404).send('User not authorization')
+	} catch (error) {
+		return res.status(500).send(error.message)
+    }
+}
+
+
+
 module.exports = {
     getEventPack,
-    createEvent
+    createEvent,
+    updateEvent,
+    deleteEvent
 }

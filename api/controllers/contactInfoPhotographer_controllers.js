@@ -30,47 +30,6 @@ async function getProfile(req, res) {
 	}
 }
 
-// async function createUser(req, res) {
-// 	try {
-// 		const payload = { email: req.body.email }
-// 		const salt = bcrypt.genSaltSync(parseInt(10))
-// 		const encrypted = bcrypt.hashSync(req.body.password, salt)
-// 		req.body.password = encrypted
-
-// 		const user = await User.create(req.body, {
-// 			attributes: { exclude: ['password'] }
-// 		})
-
-
-// 		const token = jwt.sign(payload, process.env.SECRET, { expiresIn: '24h' })
-
-// 		if (user.role === "client") {
-// 			const users = await User.create(req.body)
-// 			await users.setUser(user)
-
-// 			return res.status(200).json({
-// 				message: 'Client created',
-// 				user: user,
-// 				user: users,
-// 				token: token
-// 			})
-
-// 		} else if (user.role === "photographer") {
-// 			const contactInfoPhoto = await InfoPhotographer.create(req.body)
-// 			await contactInfoPhoto.setUser(user)
-
-// 			return res.status(200).json({
-// 				message: 'PhotoGrapher created',
-// 				user: user,
-// 				PhotoGrapherContact: contactInfoPhoto,
-// 				token: token
-// 			})
-// 		}
-// 	} catch (error) {
-// 		res.status(500).send(error.message)
-// 	}
-// }
-
 async function updateProfile(req, res) {
 	try {
 		const user = await User.findOne({
@@ -100,7 +59,6 @@ async function updateProfile(req, res) {
 		return res.status(500).send(error.message)
 	}
 }
-
 
 async function deleteProfile(req, res) {
 	try {

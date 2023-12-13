@@ -11,8 +11,11 @@ const Message = sequelize.define(
                 len: [1, 300],
             },
         },
-    },
-    { timestamps: false }
+        authId: {
+            type: DataTypes.INTEGER,
+            allowNull: true
+        },
+    }
 )
 
 module.exports = Message

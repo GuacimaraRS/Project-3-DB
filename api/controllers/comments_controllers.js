@@ -6,12 +6,13 @@ const Comment = require('../models/comments_models')
 async function getAllComment(req, res) {
 	try {
 
+		const user = await Comment.findByPk(req.params.userId)
 		const comment = await Comment.findAll({
-			where: {
-				userId: req.params.userId
+			where:{
+				userId: user.id
 			}
 		})
-
+	
 		if (comment) {
 			const message = `The all Comment are the nexts:`
 
@@ -26,12 +27,16 @@ async function getAllComment(req, res) {
 
 async function getCommentByMePhotographer(req, res) {
 	try {
-		const user = await User.findByPk(res.locals.user.id)
+		console.log(res.locals)
+		//const user = await User.findByPk(res.locals.user.id)
 			const comment = await Comment.findAll({
 				where: {
-					userId: user
+					userId: res.locals.user.id
 				}
 			})	
+			console.log(comment)
+
+			
 		if (comment) {
 			const message = `The all Comment are the nexts:`
 			return res.status(200).json({ message, comment })
@@ -73,53 +78,19 @@ async function createComment(req, res) {
 	}
 }
 
-async function updateProfile(req, res) {
+
+async function deleteComment(req, res) {
 	try {
-		const user = await User.findOne({
-			where: {
-				id: res.locals.user.id
-			},
-			include: [{ model: InfoPhotographer }]
-		});
-		await InfoPhotographer.update(req.body,{
-			where: {
-				userId: user.id
-			}
-		});
-		await User.update(req.body,{
-			where: {
-				id: res.locals.user.id
-			}
-		});
-
-		if (user ) {
-			return res.status(200).json({ message: 'Photographer updated', user: user  })
-		} else {
-			return res.status(404).send('Photographer not found')
-		}
-
-	} catch (error) {
-		return res.status(500).send(error.message)
-	}
-}
-
-
-async function deleteProfile(req, res) {
-	try {
-		const user = await User.findOne({
+		const user = await Comment.destroy({
             where: {
-                id: res.locals.user.id
-            },
-            include: [{ model: InfoPhotographer }]
+                userId: req.params.userId
+            }
         });
-			await InfoPhotographer.destroy({
-						where: {
-							userId: user.id
-						}
-					});
-        await user.destroy();
-
-        return res.status(200).send('User and associated info deleted')
+		if(user){
+			return res.status(200).send('Comment deleted')
+		}else
+			return res.status(404).send('Dont Found')
+        
 	} catch (error) {
 		return res.status(500).send(error.message)
 	}
@@ -129,5 +100,6 @@ module.exports = {
   
    getAllComment,
    getCommentByMePhotographer,
-    createComment,
+   createComment,
+   deleteComment
 }

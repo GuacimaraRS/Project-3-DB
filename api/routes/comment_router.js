@@ -1,16 +1,21 @@
 const router = require('express').Router()
-const { checkUser, checkPhotoGrapher } = require("../middlewares/auth");
+const { checkUser, checkAdmin } = require("../middlewares/auth");
 
 const {   
     getAllComment,
     getCommentByMePhotographer,
-    createComment
+    createComment,
+    deleteComment
   
  } = require('../controllers/comments_controllers')
 
 
-router.get('/:userId', getAllComment)
+
 router.get('/profile',  getCommentByMePhotographer)
+router.get('/:userId', getAllComment)
+
 router.post('/:userId',checkUser, createComment)
+
+router.delete('/:userId',checkAdmin, deleteComment)
 
 module.exports = router

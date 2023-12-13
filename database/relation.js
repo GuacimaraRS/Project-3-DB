@@ -17,10 +17,13 @@ function addRelationsToModels() {
 		User.hasOne(PhotographerProfile)
 		PhotographerProfile.belongsTo(User)
 
-		Pack.hasOne(User)
-		User.belongsTo(Pack)
+		// Message.hasOne(Message, {as: 'answerId'} )
+		// Message.belongsTo(Message, {as: 'answerId'})
 
 		//One to Many
+		User.hasMany(Event)
+		Event.belongsTo(User)
+
 		User.hasMany(Comment)
 		Comment.belongsTo(User)
 

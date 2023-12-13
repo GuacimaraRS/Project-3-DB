@@ -2,7 +2,7 @@ const { DataTypes } = require('sequelize')
 const { sequelize } = require('../../database')
 
 const PhotographerProfile = sequelize.define(
-    'photographer',
+    'infoPhotoGrapher',
     {
         address: {
             type: DataTypes.STRING

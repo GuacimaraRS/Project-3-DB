@@ -9,6 +9,8 @@ router.use('/reservation', checkAuth, require('./reservation_routes'))
 router.use('/event',checkAuth, require('./event_router'))
 router.use('/pack',checkAuth, require('./pack_router'))
 router.use('/comment', checkAuth,require('./comment_router'))
+router.use('/messages', checkAuth,require('./messages_router'))
+
 
 
 module.exports = router

@@ -5,6 +5,7 @@ const {
    getAllReservation,
    getOneReservation,
    createReservation,
+   createReservationByAdmin,
    updateReservation,
    deleteReservation,
    deleteReservationByAdmin
@@ -18,7 +19,9 @@ router.get('/', getAllReservation)
 
 router.put('/:reservationId', updateReservation)
 
+router.post('/admin/:userId', checkAdmin, createReservationByAdmin)
 router.post('/:packId', createReservation)
+
 
 router.delete('/:reservationId', deleteReservation)
 router.delete('/checkAdmin/:reservationId',checkAdmin, deleteReservationByAdmin)
