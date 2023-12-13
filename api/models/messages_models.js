@@ -11,7 +11,7 @@ const Message = sequelize.define(
                 len: [1, 300],
             },
         },
-        authId: {
+        sendTo: {
             type: DataTypes.INTEGER,
             allowNull: true
         },

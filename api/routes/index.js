@@ -10,6 +10,8 @@ router.use('/event',checkAuth, require('./event_router'))
 router.use('/pack',checkAuth, require('./pack_router'))
 router.use('/comment', checkAuth,require('./comment_router'))
 router.use('/messages', checkAuth,require('./messages_router'))
+router.use('/galery', checkAuth,require('./galery_router'))
+router.use('/imagen', checkAuth,require('./imagen_router'))
 
 
 

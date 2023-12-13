@@ -4,6 +4,7 @@ const Comment = require('../models/comments_models')
 const Messages = require ('../models/messages_models')
 
 
+
 async function getAllMessages(req, res) {
 	try {
 
@@ -31,7 +32,7 @@ async function createMessages(req, res) {
             const user =res.locals.user.id
             const messagess = await Messages.create({
                 description: req.body.description,
-                authId: req.params.userId
+                sendTo: req.params.userId
             })
             await messagess.setUser(user)
 
@@ -51,13 +52,16 @@ async function createMessages(req, res) {
 }
 
 async function answerMessage(req, res) {
-	try {
+	try {	
 		    const messageId = req.params.messageId
+			const user =res.locals.user.id
+			const clientMessage = await Messages.findByPk(messageId)
             const messagess = await Messages.create({
                 description: req.body.description,
-                authId: req.params.userId
+				messageId: messageId,
+                sendTo: clientMessage.userId
             })
-            await messagess.setUser(user)
+			await messagess.setUser(user)
 
 				if (messagess) {
 					return res.status(200).json({
@@ -92,8 +96,8 @@ async function deleteMessages(req, res) {
 }
 
 module.exports = {
-  
    getAllMessages,
    createMessages,
+   answerMessage,
    deleteMessages
 }

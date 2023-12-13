@@ -1,4 +1,4 @@
-const { where } = require('sequelize')
+
 const Event = require('../models/event_models')
 const Pack  = require('../models/pack_models')
 

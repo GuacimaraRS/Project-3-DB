@@ -11,6 +11,10 @@ const Image = sequelize.define(
         len: [1, 50],
       },
     },
+    url: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     description: {
       type: DataTypes.STRING,
       allowNull: false,

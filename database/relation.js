@@ -17,8 +17,8 @@ function addRelationsToModels() {
 		User.hasOne(PhotographerProfile)
 		PhotographerProfile.belongsTo(User)
 
-		// Message.hasOne(Message, {as: 'answerId'} )
-		// Message.belongsTo(Message, {as: 'answerId'})
+		Message.hasMany(Message, {as: 'answer'} )
+		
 
 		//One to Many
 		User.hasMany(Event)
