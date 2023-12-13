@@ -1,5 +1,5 @@
 # Project-3-DB-WEB
-- WEB PHOTOGUA5IVE
+- WEB EYES OF LIFE
   
 ## Summary
 
