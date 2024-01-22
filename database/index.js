@@ -3,7 +3,7 @@ require('dotenv').config()
 
 
 
-const sequelize = new Sequelize(`mysql://${{MYSQLUSER}}:${{MYSQL_ROOT_PASSWORD}}@${{RAILWAY_TCP_PROXY_DOMAIN}}:${{RAILWAY_TCP_PROXY_PORT}}/${{MYSQL_DATABASE}}`,{
+const sequelize = new Sequelize(`mysql://${process.env.MYSQLUSER}:${process.env.MYSQLPORT}@${process.env.MYSQLPASSWORD}:${process.env.MYSQLHOST}/${process.env.MYSQL_DATABASE}`,{
     host: 'localhost',
     dialect: 'mysql',
     port: process.env.DB_PORT,
