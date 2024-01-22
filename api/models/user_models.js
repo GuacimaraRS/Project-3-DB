@@ -35,6 +35,9 @@ const User = sequelize.define(
                 },
             },
         },
+        imagen: {
+            type: DataTypes.STRING,
+        },
     },
     { timestamps: false }
 )
