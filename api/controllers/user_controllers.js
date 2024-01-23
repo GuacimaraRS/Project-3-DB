@@ -49,7 +49,7 @@ async function getProfile(req, res) {
 			where: {
 				id: res.locals.user.id
 			},
-			attributes: ['id','name_user','phone','email']
+			attributes: ['id','name_user','phone','email', 'imagen']
 		})
 
 		if (user) {
